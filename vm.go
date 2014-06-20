@@ -1,3 +1,5 @@
+// Written by pricees, inspired by Great Code Club
+
 package vm
 
 type Op struct {

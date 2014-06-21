@@ -67,7 +67,7 @@ func (vm *VM) Step() int {
 				}
 				break
 			case 0x00E0:
-				//vm.display //.clear()
+				vm.DisplayClear()
 				break
 			}
 			break
@@ -153,6 +153,10 @@ func (vm *VM) DrawSprite(x uint8, y uint8, i int, n int) bool {
 	return false
 }
 
+func (vm *VM) DisplayClear() bool {
+	return display
+}
+
 func NewVM() *VM {
-	return &VM{pc: 0x200, stack: make([]int, 0, 80)}
+	return &VM{pc: 0x200, stack: make([]int, 0, 80), cpuSpeed: 100}
 }

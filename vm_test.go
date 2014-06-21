@@ -110,6 +110,14 @@ func TestLoadProgram(t *testing.T) {
 	}
 }
 
+func TestDisplayClear(t *testing.T) {
+	vm := NewVM()
+
+	if !vm.DisplayClear() {
+		t.Error("Display should have cleared")
+	}
+}
+
 func TestStep(t *testing.T) {
 	vm := NewVM()
 

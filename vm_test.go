@@ -118,6 +118,17 @@ func TestDisplayClear(t *testing.T) {
 	}
 }
 
+func TestDrawSprite(t *testing.T) {
+	vm := NewVM()
+
+	res := vm.DrawSprite(2, 3, 0x21A, 5)
+	exp := false
+
+	if res != exp {
+		t.Error("vm.DrawSprite should have output", exp, " but was ", res)
+	}
+}
+
 func TestStep(t *testing.T) {
 	vm := NewVM()
 

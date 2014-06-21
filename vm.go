@@ -3,6 +3,7 @@
 package vm
 
 import (
+	"fmt"
 	"math/rand"
 )
 
@@ -12,7 +13,7 @@ type Op struct {
 }
 
 type VM struct {
-	display  Display
+	display  *Display
 	cpuSpeed int   // hertz
 	stack    []int // TODO: Find size of Chip-8 stack
 
@@ -149,12 +150,32 @@ func (vm *VM) StackPop() (int, bool) {
 	return ret_val, err
 }
 
-func (vm *VM) DrawSprite(x uint8, y uint8, i int, n int) bool {
-	return false
+func (vm *VM) DrawSprite(x uint8, y uint8, address int, nbytes int) bool {
+	collision := false
+
+	for line := 0; line < nbytes; line++ { // Walk the horizontal lines (Y)
+		bits := vm.memory[address+line] // Get the sprite line bits to
+
+		for bit := 7; bit >= 0; bit-- { // Walk the bits on the line (X),
+			// Starting form the last bit (left)
+
+			if bits&1 > 0 {
+				fmt.Println("Got here 2!")
+				if !vm.display.XorPixel(int(x)+bit, int(y)+bit) {
+					collision = true
+				}
+			}
+			bits >>= 1
+		}
+	}
+
+	fmt.Println(vm.display)
+
+	return collision
 }
 
 func (vm *VM) DisplayClear() bool {
-	return display
+	return true
 }
 
 func NewVM() *VM {

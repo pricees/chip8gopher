@@ -66,10 +66,29 @@ func TestLoadProgram(t *testing.T) {
 
 	vm.LoadProgram(test_data)
 
-	res := vm.memory[0:5]
+	res := vm.memory[512:517] // 0x200 + i
 
 	if !bytes.Equal(res, test_data) {
 		t.Error("vm.memory should have a length of ", test_data,
 			" but was ", res)
 	}
 }
+
+func TestStep(t *testing.T) {
+	vm := NewVM()
+
+	vm.Step()
+	res := vm.Step()
+	exp := 516
+
+	if res != exp {
+		t.Error("vm.Step should have returned a pc of ", exp,
+			" but was ", res)
+	}
+}
+
+func TestStep1(t *testing.T) {}
+func TestStep2(t *testing.T) {}
+func TestStep3(t *testing.T) {}
+func TestStep4(t *testing.T) {}
+func TestStep5(t *testing.T) {}

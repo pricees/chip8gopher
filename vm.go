@@ -13,8 +13,8 @@ type Op struct {
 
 type VM struct {
 	display  Display
-	cpuSpeed int     // hertz
-	stack    [40]int // TODO: Find size of Chip-8 stack
+	cpuSpeed int   // hertz
+	stack    []int // TODO: Find size of Chip-8 stack
 
 	// 4KB of memory
 	memory [4096]uint8
@@ -60,12 +60,14 @@ func (vm *VM) Step() int {
 			switch tmp_inst {
 			case 0x00EE: // `00EE` - Return from a subroutine
 				// pop stack
-				new_pc := vm.stack.pop
+				new_pc, err := vm.StackPop()
 
-				vm.pc = new_pc
+				if !err {
+					vm.pc = new_pc
+				}
 				break
 			case 0x00E0:
-				vm.display //.clear()
+				//vm.display //.clear()
 				break
 			}
 			break
@@ -74,7 +76,7 @@ func (vm *VM) Step() int {
 		// 1nnn - Jump to location nnn.
 		vm.pc = nnn
 	case 0x2000:
-		vm.stack //.push(vm.pc)
+		vm.StackPush(vm.pc)
 		vm.pc = nnn
 		break
 	case 0x3000:
@@ -127,10 +129,30 @@ func (vm *VM) Step() int {
 	return vm.pc
 }
 
+func (vm *VM) StackPush(val int) int {
+	vm.stack = append(vm.stack, val)
+	return len(vm.stack)
+}
+
+func (vm *VM) StackPop() (int, bool) {
+	size := len(vm.stack)
+
+	ret_val := 0
+	err := false
+
+	if size > 0 {
+		ret_val = vm.stack[size-1]
+		vm.stack = vm.stack[:size-1]
+	} else {
+		err = true
+	}
+	return ret_val, err
+}
+
 func (vm *VM) DrawSprite(x uint8, y uint8, i int, n int) bool {
 	return false
 }
 
 func NewVM() *VM {
-	return &VM{pc: 0x200}
+	return &VM{pc: 0x200, stack: make([]int, 0, 80)}
 }

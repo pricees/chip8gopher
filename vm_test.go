@@ -21,11 +21,47 @@ func TestMemorySize(t *testing.T) {
 func TestMaxStackFrames(t *testing.T) {
 	vm := NewVM()
 
-	exp := 40
+	exp := 0
 	res := len(vm.stack)
 
 	if res != exp {
 		t.Error("vm.stack size is ", res, " expected ", exp)
+	}
+}
+
+func TestStackPush(t *testing.T) {
+	vm := NewVM()
+
+	exp := 3
+	vm.StackPush(1)
+	vm.StackPush(100)
+	res := vm.StackPush(1000)
+
+	if res != exp {
+		t.Error("vm.stack size is ", res, " expected ", exp)
+	}
+}
+
+func TestStackPop(t *testing.T) {
+	vm := NewVM()
+
+	vm.stack = []int{0, 1, 2, 3, 4000}
+	exp := 4000
+	res, err := vm.StackPop()
+
+	if err || res != exp {
+		t.Error("vm.StackPop() size is ", res, " expected ", exp)
+	}
+}
+
+func TestStackError(t *testing.T) {
+	vm := NewVM()
+
+	vm.stack = []int{}
+	_, err := vm.StackPop()
+
+	if !err {
+		t.Error("vm.StackPop() should have return err")
 	}
 }
 

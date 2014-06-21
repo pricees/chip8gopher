@@ -169,7 +169,7 @@ func (vm *VM) DrawSprite(x uint8, y uint8, address int, nbytes int) bool {
 		}
 	}
 
-	fmt.Println(vm.display)
+	vm.display.Draw()
 
 	return collision
 }

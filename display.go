@@ -1,10 +1,11 @@
 package vm
 
+import "fmt"
+
 const BLANK = "_"
 
 type Display struct {
-	canvas [][]string
-	pixels [][]string
+	canvas [64][32]string
 
 	// Display dimensions
 	width  int
@@ -15,7 +16,9 @@ type Display struct {
 }
 
 func NewDisplay() *Display {
-	return &Display{canvas: [][]string{}, width: 64, height: 32}
+	dm := Display{canvas: [64][32]string{}, width: 64, height: 32}
+	dm.Clear()
+	return &dm
 }
 
 func (display *Display) Clear() {
@@ -24,6 +27,10 @@ func (display *Display) Clear() {
 			display.canvas[i][j] = BLANK
 		}
 	}
+}
+
+func (display *Display) Draw() {
+	fmt.Println(display.canvas)
 }
 
 func (display *Display) XorPixel(x int, y int) bool {

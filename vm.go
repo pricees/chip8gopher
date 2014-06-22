@@ -4,6 +4,7 @@ package vm
 
 import (
 	"math/rand"
+	"time"
 )
 
 type Op struct {
@@ -15,6 +16,8 @@ type VM struct {
 	display  *Display
 	cpuSpeed int   // hertz
 	stack    []int // TODO: Find size of Chip-8 stack
+
+	running bool
 
 	// 4KB of memory
 	memory [4096]uint8
@@ -175,5 +178,25 @@ func (vm *VM) DisplayClear() bool {
 }
 
 func NewVM() *VM {
-	return &VM{display: NewDisplay(), pc: 0x200, stack: make([]int, 0, 80), cpuSpeed: 100}
+	return &VM{display: NewDisplay(), pc: 0x200, stack: make([]int, 0, 80), cpuSpeed: 100, running: false}
+}
+
+func (vm *VM) Run() {
+
+	interval := 1000 / vm.cpuSpeed
+
+	go func() {
+		for {
+			if running {
+				vm.Step()
+				time.Sleep(interval * time.Millisecond)
+			} else {
+				time.Sleep(1 * time.Second)
+			}
+		}
+	}()
+}
+
+func (vm *VM) Stop() {
+	vm.running = false
 }

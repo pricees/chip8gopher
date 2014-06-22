@@ -30,7 +30,9 @@ func (display *Display) Clear() {
 }
 
 func (display *Display) Draw() {
-	fmt.Println(display.canvas)
+	for i := 0; i < display.height; i++ {
+		fmt.Println(display.canvas[i])
+	}
 }
 
 func (display *Display) XorPixel(x int, y int) bool {
@@ -52,9 +54,9 @@ func (display *Display) XorPixel(x int, y int) bool {
 	active := display.canvas[x][y] == BLANK
 	if active {
 		// Javascript was: var active = this.canvas[x][y] ^= 1
-		display.canvas[x][y] = "*"
-	} else {
 		display.canvas[x][y] = " "
+	} else {
+		display.canvas[x][y] = "*"
 	}
 	return active
 }

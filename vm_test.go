@@ -3,7 +3,6 @@ package vm
 
 import (
 	"bytes"
-	_ "fmt"
 	"testing"
 )
 
@@ -121,8 +120,15 @@ func TestDisplayClear(t *testing.T) {
 func TestDrawSprite(t *testing.T) {
 	vm := NewVM()
 
-	res := vm.DrawSprite(2, 3, 0x21A, 5)
-	exp := false
+	vm.memory[0x21A] = 0xF0 //  11110000  ****
+	//	vm.memory[0x21B] = 0x90 //  11110000  *  *
+	//	vm.memory[0x21C] = 0x90 //  11110000  *  *
+	//	vm.memory[0x21D] = 0x90 //  11110000  *  *
+	//	vm.memory[0x21E] = 0xF0 //  11110000  ****
+
+	res := vm.DrawSprite(2, 3, 0x21B, 5)
+	vm.display.Draw()
+	exp := true
 
 	if res != exp {
 		t.Error("vm.DrawSprite should have output", exp, " but was ", res)
@@ -141,9 +147,3 @@ func TestStep(t *testing.T) {
 			" but was ", res)
 	}
 }
-
-func TestStep1(t *testing.T) {}
-func TestStep2(t *testing.T) {}
-func TestStep3(t *testing.T) {}
-func TestStep4(t *testing.T) {}
-func TestStep5(t *testing.T) {}

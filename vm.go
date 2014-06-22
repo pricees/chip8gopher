@@ -3,7 +3,6 @@
 package vm
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -154,13 +153,12 @@ func (vm *VM) DrawSprite(x uint8, y uint8, address int, nbytes int) bool {
 	collision := false
 
 	for line := 0; line < nbytes; line++ { // Walk the horizontal lines (Y)
-		bits := vm.memory[address+line] // Get the sprite line bits to
 
+		bits := vm.memory[address+line] // Get the sprite line bits to
 		for bit := 7; bit >= 0; bit-- { // Walk the bits on the line (X),
 			// Starting form the last bit (left)
 
 			if bits&1 > 0 {
-				fmt.Println("Got here 2!")
 				if !vm.display.XorPixel(int(x)+bit, int(y)+bit) {
 					collision = true
 				}
@@ -168,8 +166,6 @@ func (vm *VM) DrawSprite(x uint8, y uint8, address int, nbytes int) bool {
 			bits >>= 1
 		}
 	}
-
-	vm.display.Draw()
 
 	return collision
 }
@@ -179,5 +175,5 @@ func (vm *VM) DisplayClear() bool {
 }
 
 func NewVM() *VM {
-	return &VM{pc: 0x200, stack: make([]int, 0, 80), cpuSpeed: 100}
+	return &VM{display: NewDisplay(), pc: 0x200, stack: make([]int, 0, 80), cpuSpeed: 100}
 }

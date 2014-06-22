@@ -183,13 +183,14 @@ func NewVM() *VM {
 
 func (vm *VM) Run() {
 
-	interval := 1000 / vm.cpuSpeed
+	//interval := 1000 / vm.cpuSpeed
 
+	vm.running = true
 	go func() {
 		for {
-			if running {
+			if vm.running {
 				vm.Step()
-				time.Sleep(interval * time.Millisecond)
+				time.Sleep(100 * time.Millisecond)
 			} else {
 				time.Sleep(1 * time.Second)
 			}

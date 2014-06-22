@@ -3,7 +3,10 @@ package vm
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 	"testing"
+	"time"
 )
 
 func TestMemorySize(t *testing.T) {
@@ -127,7 +130,6 @@ func TestDrawSprite(t *testing.T) {
 	//	vm.memory[0x21E] = 0xF0 //  11110000  ****
 
 	res := vm.DrawSprite(2, 3, 0x21B, 5)
-	vm.display.Draw()
 	exp := true
 
 	if res != exp {
@@ -146,4 +148,24 @@ func TestStep(t *testing.T) {
 		t.Error("vm.Step should have returned a pc of ", exp,
 			" but was ", res)
 	}
+}
+
+func TestAll(t *testing.T) {
+	vm := NewVM()
+
+	data := make([]uint8, 10000)
+	file, err := os.Open("roms/LOGO")
+
+	count, err := file.Read(data)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	vm.LoadProgram(data[:count])
+	fmt.Println("Read ", count, "bytes:\t", vm.memory[0x200:(0x200+count)])
+	vm.Run()
+	time.Sleep(1 * time.Second)
+	vm.display.Draw()
+
 }

@@ -3,14 +3,10 @@
 package vm
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
-
-type Op struct {
-	opcode   int
-	operands int
-}
 
 type VM struct {
 	display  *Display
@@ -40,7 +36,7 @@ func (vm *VM) LoadProgram(data []uint8) {
 func (vm *VM) Step() int {
 
 	// Read the instructions at `pc`. Instructions are 2 bytes long.
-	instruction := (vm.memory[vm.pc] << 8) + vm.memory[vm.pc+1]
+	instruction := (uint16(vm.memory[vm.pc]) << 8) + uint16(vm.memory[vm.pc+1])
 
 	// Move to next instruction
 	vm.pc += 2
@@ -57,6 +53,8 @@ func (vm *VM) Step() int {
 
 	// Inspect the first nibble, the opcode.
 	// A case for each type of instruction
+	fmt.Printf("tmp_inst: %x * 0xF000 =  %x\n", tmp_inst, tmp_inst&0xF000)
+
 	switch tmp_inst & 0xF000 {
 	case 0x000:
 		{
@@ -79,6 +77,7 @@ func (vm *VM) Step() int {
 		// 1nnn - Jump to location nnn.
 		vm.pc = nnn
 	case 0x2000:
+		fmt.Printf("Pushing on the stack %x", vm.pc)
 		vm.StackPush(vm.pc)
 		vm.pc = nnn
 		break

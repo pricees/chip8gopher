@@ -154,7 +154,7 @@ func TestAll(t *testing.T) {
 	vm := NewVM()
 
 	data := make([]uint8, 10000)
-	file, err := os.Open("roms/LOGO")
+	file, err := os.Open("roms/MAZE")
 
 	count, err := file.Read(data)
 
@@ -165,7 +165,7 @@ func TestAll(t *testing.T) {
 	vm.LoadProgram(data[:count])
 	fmt.Println("Read ", count, "bytes:\t", vm.memory[0x200:(0x200+count)])
 	vm.Run()
-	time.Sleep(1 * time.Second)
+	time.Sleep(3 * time.Second)
 	vm.display.Draw()
 
 }
